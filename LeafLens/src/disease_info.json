@@ -1,0 +1,42 @@
+{
+    "Tomato___Bacterial_spot": {
+        "causes": "Caused by Xanthomonas bacteria. Thrives in warm, humid, and rainy weather.",
+        "solution": "Apply copper-based fungicides. Remove infected plant debris and avoid overhead watering."
+    },
+    "Tomato___Early_blight": {
+        "causes": "Fungal infection by Alternaria solani. Worsens in high humidity and warm temperatures.",
+        "solution": "Use fungicides with chlorothalonil. Prune lower leaves to improve air circulation and practice crop rotation."
+    },
+    "Tomato___Late_blight": {
+        "causes": "Caused by the oomycete Phytophthora infestans. Spreads rapidly in cool, wet weather.",
+        "solution": "Apply preventative fungicides early. Destroy infected plants immediately to prevent spreading."
+    },
+    "Tomato___Leaf_Mold": {
+        "causes": "Passalora fulva fungus. Very common in greenhouses with poor ventilation and high humidity.",
+        "solution": "Increase air circulation, reduce humidity, and use preventative fungicides."
+    },
+    "Tomato___Septoria_leaf_spot": {
+        "causes": "Septoria lycopersici fungus. Often starts on lower leaves after heavy rainfall.",
+        "solution": "Remove affected leaves. Apply copper sprays or fungicidal treatments. Avoid wetting leaves."
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+        "causes": "Tiny pests that suck sap from the leaves. Worsens in hot, dry conditions.",
+        "solution": "Spray with insecticidal soap, neem oil, or introduce predatory mites. Keep plants well-watered."
+    },
+    "Tomato___Target_Spot": {
+        "causes": "Corynespora cassiicola fungus. Favored by high humidity and warm temperatures.",
+        "solution": "Improve airflow through pruning. Apply appropriate fungicides and ensure proper spacing between plants."
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+        "causes": "Viral infection transmitted by silverleaf whiteflies.",
+        "solution": "There is no cure once infected. Pull and destroy the plant. Control whitefly populations using yellow sticky traps."
+    },
+    "Tomato___Tomato_mosaic_virus": {
+        "causes": "A highly contagious virus often spread by contaminated hands, tools, or seeds.",
+        "solution": "No cure. Uproot and burn infected plants. Wash hands thoroughly and sterilize tools before touching healthy plants."
+    },
+    "Tomato___healthy": {
+        "causes": "Plant is perfectly healthy!",
+        "solution": "Continue your current care routine. Ensure adequate sunlight, water, and nutrients."
+    }
+}
