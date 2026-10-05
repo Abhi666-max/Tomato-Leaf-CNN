@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 import torch.nn as nn
@@ -7,8 +7,17 @@ from PIL import Image
 import io
 import os
 import json
+import numpy as np
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 app = FastAPI(title="LeafLens AI API", description="Tomato Leaf Disease Detection API")
+
+# --- Rate Limiter ---
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Allow requests from the React frontend (Vercel)
 app.add_middleware(
@@ -112,15 +121,40 @@ transform = transforms.Compose([
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
+def is_likely_plant(image: Image.Image) -> bool:
+    """Basic OOD Detection: Checks if the image contains plant-like colors (Green/Yellow/Brown)."""
+    hsv_data = np.array(image.convert("HSV"))
+    hues = hsv_data[:,:,0]
+    sats = hsv_data[:,:,1]
+    
+    # Plant colors: Hue roughly 20 to 110 (out of 255), with enough saturation
+    plant_pixels = ((hues > 20) & (hues < 110) & (sats > 40)).sum()
+    total_pixels = hsv_data.shape[0] * hsv_data.shape[1]
+    
+    plant_ratio = plant_pixels / total_pixels
+    return plant_ratio > 0.02  # At least 2% plant colors
+
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"message": "🌿 LeafLens API is live!", "status": "healthy"}
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+@limiter.limit("15/minute")
+async def predict(request: Request, file: UploadFile = File(...)):
     # Read image
     contents = await file.read()
     image = Image.open(io.BytesIO(contents)).convert("RGB")
+    
+    # OOD Check
+    if not is_likely_plant(image):
+        return {
+            "disease": "Unrecognized Image",
+            "class_key": "OOD",
+            "confidence": 0,
+            "is_healthy": False,
+            "causes": "The uploaded image does not appear to be a plant leaf. The AI could not find enough green, yellow, or brown plant-like features.",
+            "solution": "Please upload a clear, focused image of a tomato leaf for accurate diagnosis."
+        }
     
     # Preprocess
     input_tensor = transform(image).unsqueeze(0).to(device)
