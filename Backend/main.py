@@ -13,7 +13,10 @@ app = FastAPI(title="LeafLens AI API", description="Tomato Leaf Disease Detectio
 # Allow requests from the React frontend (Vercel)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your Vercel URL in production
+    allow_origins=[
+        "https://leaflens-five.vercel.app", 
+        "http://localhost:5173"
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
