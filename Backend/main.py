@@ -23,7 +23,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://leaflens-five.vercel.app", 
+        "https://leaflens-two.vercel.app",
         "http://localhost:5173"
     ],
     allow_methods=["*"],
