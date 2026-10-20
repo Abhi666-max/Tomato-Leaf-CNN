@@ -118,6 +118,8 @@ export default function App() {
         conf:      data.confidence,
         causes:    data.causes,
         solution:  data.solution,
+        reasoning: data.reasoning,
+        allPredictions: data.all_predictions || [],
       });
       setTimeout(()=>document.getElementById('res-anchor')?.scrollIntoView({behavior:'smooth'}),60);
     } catch (err) {
@@ -309,6 +311,16 @@ export default function App() {
                             <p>{result.solution}</p>
                           </motion.div>
                         </div>
+
+                        {/* Reasoning Block */}
+                        {result.reasoning && (
+                          <motion.div className="reasoning-box"
+                            initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.34}}
+                          >
+                            <div className="info-head" style={{color:'var(--ink-2)'}}><Brain size={14}/> Model Reasoning</div>
+                            <p>{result.reasoning}</p>
+                          </motion.div>
+                        )}
                       </div>
                     </div>
 
@@ -320,6 +332,35 @@ export default function App() {
                         <RotateCcw size={14}/> Scan Another Leaf
                       </button>
                     </div>
+
+                    {/* Full Ranked Breakdown */}
+                    {result.allPredictions && result.allPredictions.length > 0 && (
+                      <motion.div className="breakdown-section"
+                        initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{delay:0.4}}
+                      >
+                        <div className="breakdown-header">
+                          <BarChart3 size={15}/>
+                          <span>Full Probability Breakdown — All 10 Classes</span>
+                        </div>
+                        <div className="breakdown-table">
+                          {result.allPredictions.map((pred) => (
+                            <div key={pred.class_key} className={`breakdown-row ${pred.is_selected ? 'selected' : ''}`}>
+                              <div className="bd-rank">#{pred.rank}</div>
+                              <div className="bd-name">{pred.name}</div>
+                              <div className="bd-bar-wrap">
+                                <motion.div
+                                  className={`bd-bar ${pred.is_selected ? 'selected' : ''}`}
+                                  initial={{width:0}}
+                                  animate={{width:`${Math.max(pred.confidence, 0.5)}%`}}
+                                  transition={{delay: 0.4 + pred.rank * 0.04, duration:0.6, ease:'easeOut'}}
+                                />
+                              </div>
+                              <div className="bd-conf">{pred.confidence.toFixed(2)}%</div>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
 
                   </div>
                 </div>

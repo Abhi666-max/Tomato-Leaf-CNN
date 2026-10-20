@@ -306,6 +306,59 @@ button{font-family:var(--sans);}
 }
 .btn-reset:hover{border-color:var(--forest);color:var(--forest);background:var(--forest-bg);box-shadow:var(--sh-sm);}
 
+/* Reasoning Box */
+.reasoning-box {
+  padding:16px 20px;border-radius:14px;
+  background:#f0f4f1;border:1px solid var(--forest-bd);margin-top:4px;
+}
+.reasoning-box p { color:var(--ink-2);font-size:.88rem;line-height:1.75; }
+
+/* Breakdown Section */
+.breakdown-section {
+  margin-top:28px;padding:24px;
+  background:var(--cream);border:1px solid var(--border-2);
+  border-radius:18px;
+}
+.breakdown-header {
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ink-2);margin-bottom:20px;
+}
+.breakdown-table { display:flex;flex-direction:column;gap:10px; }
+.breakdown-row {
+  display:grid;grid-template-columns:32px 1fr 1fr 64px;
+  align-items:center;gap:10px;padding:10px 14px;
+  border-radius:10px;background:var(--white);
+  border:1px solid var(--border-2);transition:all .2s;
+}
+.breakdown-row.selected {
+  border-color:var(--forest);background:var(--forest-bg);
+}
+.bd-rank {
+  font-family:var(--mono);font-size:.72rem;font-weight:700;
+  color:var(--ink-3);
+}
+.breakdown-row.selected .bd-rank { color:var(--forest); }
+.bd-name {
+  font-size:.85rem;font-weight:500;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.breakdown-row.selected .bd-name { font-weight:700;color:var(--forest); }
+.bd-bar-wrap {
+  height:6px;background:var(--cream-alt);border-radius:3px;overflow:hidden;
+}
+.bd-bar {
+  height:100%;border-radius:3px;background:var(--border);
+}
+.bd-bar.selected { background:var(--forest); }
+.bd-conf {
+  font-family:var(--mono);font-size:.78rem;font-weight:600;
+  color:var(--ink-2);text-align:right;
+}
+.breakdown-row.selected .bd-conf { color:var(--forest); }
+
+
 /* ── SECTIONS ── */
 .section-block{padding:80px 20px;border-top:1px solid var(--border);}
 .section-block.alt{background:var(--cream-alt);}

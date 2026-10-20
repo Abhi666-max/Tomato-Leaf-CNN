@@ -172,11 +172,47 @@ async def predict(request: Request, file: UploadFile = File(...)):
     # Format display name
     display_name = predicted_class.replace("Tomato___", "").replace("_", " ")
     
+    # Build full ranked breakdown of all 10 classes
+    all_probs = probabilities[0].tolist()
+    all_predictions = sorted(
+        [
+            {
+                "rank": 0,
+                "class_key": CLASS_NAMES[i],
+                "name": CLASS_NAMES[i].replace("Tomato___", "").replace("_", " "),
+                "confidence": round(all_probs[i] * 100, 2),
+                "is_selected": i == predicted_idx.item()
+            }
+            for i in range(len(CLASS_NAMES))
+        ],
+        key=lambda x: x["confidence"],
+        reverse=True
+    )
+    for rank, item in enumerate(all_predictions, start=1):
+        item["rank"] = rank
+
+    # Reasoning: why was this class selected
+    second_best = all_predictions[1]
+    margin = round(all_predictions[0]["confidence"] - second_best["confidence"], 2)
+    reasoning = (
+        f"The model evaluated all 10 possible conditions. '{display_name}' was selected as the "
+        f"top prediction with {confidence_pct}% confidence. The next closest candidate was "
+        f"'{second_best['name']}' at {second_best['confidence']}% — a margin of {margin}%. "
+        + (
+            "This large margin indicates a high-certainty diagnosis."
+            if margin > 10 else
+            "The relatively small margin suggests some visual similarity between these conditions. Consider consulting an agricultural expert."
+        )
+    )
+
     return {
         "disease": display_name,
         "class_key": predicted_class,
         "confidence": confidence_pct,
         "is_healthy": predicted_class == "Tomato___healthy",
         "causes": info["causes"],
-        "solution": info["solution"]
+        "solution": info["solution"],
+        "reasoning": reasoning,
+        "all_predictions": all_predictions
     }
+
